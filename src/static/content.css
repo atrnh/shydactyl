@@ -1,9 +1,9 @@
 #cmdline_iframe {
     position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
+    top: 25% !important;
+    left: 10% !important;
     z-index: 2147483647 !important;
-    width: 100% !important;
+    width: 80% !important;
     height: 0 !important;
     border: 0 !important;
     padding: 0 !important;
@@ -15,12 +15,12 @@
 .TridactylStatusIndicator {
     position: fixed !important;
     bottom: 0 !important;
-    font-family: monospace !important;
+    font-family: "Fira Code", monospace !important;
     background: white !important;
-    border: 1.5px lightgray solid !important;
-    border-radius: 2px !important;
-    font-size: 12px !important;
-    padding: 0.25ex !important;
+    border: 1px #000 solid !important;
+    font-size: 9px !important;
+    font-weight: 200 !important;
+    padding: 0.8ex !important;
     right: 2px !important;
     bottom: 2px !important;
     z-index: 2147483646 !important; /* this is one less than the command line so that it is hidden by it */
@@ -29,6 +29,14 @@
     -moz-user-select: none !important;
     -ms-user-select: none !important;
     user-select: none !important;
+}
+
+#Shydactyl-normal {
+  border-color: green !important;
+}
+
+#Shydactyl-insert {
+  border-color: yellow !important;
 }
 
 @media print {

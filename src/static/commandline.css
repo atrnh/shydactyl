@@ -9,15 +9,15 @@ body {
 
 input {
   width: 100%;
-  font-family: monospace;
-  font-size: 9pt;
+  font-family: "San Francisco", sans-serif;
+  font-size: 1.5rem;
   line-height: 1.5;
   color: black;
   background:  white;
-  border: unset;
   /* we currently have a border from the completions */
   /* border-top: solid 1px lightgray; */
-  padding-left: 0.5ex;
+  padding: 1rem;
+  border: 2px solid #000;
 }
 
 /* COMPLETIONS */
@@ -27,60 +27,36 @@ input {
   color: black;
   background: white;
   display: inline-block;
-  font-size: 10pt;
-  font-family: monospace;
+  font-weight: 200;
+  font-family: sans-serif;
   overflow: hidden;
   width: 100%;
-  border-top: 0.5px solid grey;
 }
 
-/* Olie doesn't know how CSS inheritance works */
-#completions .HistoryCompletionSource {
+#completions table {
+  width: 100%;
+  font-size: 0.8rem;
+  font-weight: 200;
+  border-spacing: 0;
+  table-layout: fixed;
+  padding: 1rem;
+  padding-top: 0;
+}
+
+#completions > div {
   max-height: calc(20 * var(--option-height));
   min-height: calc(10 * var(--option-height));
 }
 
-#completions .HistoryCompletionSource table {
-  width: 100%;
-  font-size: 9pt;
-  border-spacing: 0;
-  table-layout: fixed;
-}
-
-/* redundancy 2: redundancy 2: more redundancy */
-#completions .BmarkCompletionSource {
-  max-height: calc(20 * var(--option-height));
-  min-height: calc(10 * var(--option-height));
-}
-
-#completions .BmarkCompletionSource table {
-  width: 100%;
-  font-size: 9pt;
-  border-spacing: 0;
-  table-layout: fixed;
-}
-/* redundancy ends */
-
-#completions .BufferCompletionSource {
-  max-height: calc(20 * var(--option-height));
-  min-height: calc(10 * var(--option-height));
-}
-
-#completions .BufferCompletionSource table {
-  width: 100%;
-  font-size: 9pt;
-  border-spacing: 0;
-  table-layout: fixed;
-}
-
-#completions table tr td:nth-of-type(1) { width: 1.5em; padding-left: 0.5em}
-#completions table tr td:nth-of-type(2) { width: 1.5em; }
+#completions table tr td:nth-of-type(1) { display: none; }
+#completions table tr td:nth-of-type(2) { display: none; }
 /* #completions table tr td:nth-of-type(3) { width: 5em; } */
 #completions table tr td:nth-of-type(4) { width: 50%; }
 
 #completions table tr {
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #completions table tr td {
@@ -95,10 +71,10 @@ input {
 }
 
 #completions .sectionHeader {
-  background: linear-gradient(lightgrey, #ddd, lightgrey);
-  font-weight: bold;
-  border-bottom: 0.5px solid bottom;
-  padding-left: 0.5ex;
+  font-family: sans-serif;
+  font-weight: 200;
+  padding: 1rem;
+  padding-bottom: 0.2rem;
 }
 
 #completions .sectionHeader, #completions .option {
