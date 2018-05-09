@@ -103,6 +103,7 @@ config.getAsync("modeindicator").then(mode => {
                 !["input", "ignore"].includes(mode)
             ) {
                 statusIndicator.textContent = "insert"
+                statusIndicator.id = "Shydactyl-insert"
                 // this doesn't work; statusIndicator.style is full of empty string
                 // statusIndicator.style.borderColor = "green !important"
                 // need to fix loss of focus by click: doesn't do anything here.
@@ -111,9 +112,11 @@ config.getAsync("modeindicator").then(mode => {
                 !dom.isTextEditable(document.activeElement)
             ) {
                 statusIndicator.textContent = "normal"
+                statusIndicator.id = "Shydactyl-normal"
                 // statusIndicator.style.borderColor = "lightgray !important"
             } else {
                 statusIndicator.textContent = mode
+                statusIndicator.id = "Shydactyl-" + mode
             }
         }
         if (config.get("modeindicator") !== "true") statusIndicator.remove()
