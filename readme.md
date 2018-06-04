@@ -1,4 +1,6 @@
-**⚠️ This project is now part of the official [Tridactyl](https://addons.mozilla.org/en-US/firefox/addon/tridactyl-vim/?src=external-github) extension**
+### ⚠️ This project is now part of the official [Tridactyl](https://addons.mozilla.org/en-US/firefox/addon/tridactyl-vim/?src=external-github) extension
+
+I'm still going to continue development on this fork though; scroll down for installation instructions.
 
 ![screencap](screen.png)
 
