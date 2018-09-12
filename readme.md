@@ -1,19 +1,15 @@
+### ⚠️ This project is now part of the official [Tridactyl](https://addons.mozilla.org/en-US/firefox/addon/tridactyl-vim/?src=external-github) extension
+
+I'm still going to continue development on this fork though; scroll down for installation instructions.
+
 ![screencap](screen.png)
 
-# Shydactyl
+# Installation
+You can get Shydactyl in one of two ways:
 
-A reskinned [Tridactyl](https://github.com/cmcaine/tridactyl) for when you want
-to hide your power level.
+## Official Build
+To activate the theme from the Tridactyl command line:
+`set theme shydactyl`
 
-## Why
-
-Tridactyl's interface makes it very obvious that it's some sort of power user
-thing.
-
-Shydactyl makes it less obvious.
-
-## What's a Tridactyl
-
-> Replace Firefox's default control mechanism with one modelled on the one true editor, Vim.
-
-Their readme is much better than this one, so go there
+## Latest
+Follow build instructions [here](https://github.com/cmcaine/tridactyl#building-and-installing)
