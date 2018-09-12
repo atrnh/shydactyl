@@ -16,6 +16,12 @@ interface Window {
     eval(str: string): any
 }
 
+// Again, firefox-specific
+interface UIEvent {
+    pageX: number
+    pageY: number
+}
+
 interface HTMLElement {
     // Let's be future proof:
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
@@ -50,3 +56,14 @@ declare function html(
     strings: TemplateStringsArray,
     ...values: any[]
 ): HTMLElement
+
+declare namespace browser.webRequest {
+    function filterResponseData(requestId: string): any
+}
+
+// Stop typedoc complaining about toBeAll.
+declare namespace jest {
+    interface Matchers<R> {
+        toBeAll: any
+    }
+}

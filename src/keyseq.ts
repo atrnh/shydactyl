@@ -89,9 +89,7 @@ export class MinimalKey {
     }
 }
 
-import { MsgSafeKeyboardEvent } from "./msgsafe"
-
-type KeyEventLike = MinimalKey | MsgSafeKeyboardEvent | KeyboardEvent
+type KeyEventLike = MinimalKey | KeyboardEvent
 
 // }}}
 
@@ -103,6 +101,7 @@ type KeyMap = Map<MinimalKey[], MapTarget>
 export type ParserResponse = {
     keys?: KeyEventLike[]
     value?: any
+    exstr?: any
     isMatch: boolean
 }
 
@@ -129,7 +128,7 @@ export function parse(keyseq: KeyEventLike[], map: KeyMap): ParserResponse {
                 possibleMappings,
                 ([k, v]) => k.length === keyseq.length,
             )
-            return { value: perfect[1], isMatch: true }
+            return { value: perfect[1], exstr: perfect[1], isMatch: true }
         } catch (e) {
             if (!(e instanceof RangeError)) throw e
         }
@@ -299,11 +298,6 @@ export function mapstrMapToKeyMap(mapstrMap: Map<string, MapTarget>): KeyMap {
     return newKeyMap
 }
 
-export function mapstrObjToKeyMap(mapstrObj): KeyMap {
-    const mapstrMap = new Map(Object.entries(mapstrObj))
-    return mapstrMapToKeyMap(mapstrMap)
-}
-
 // }}}
 
 // {{{ Utility functions for dealing with KeyboardEvents
@@ -325,6 +319,47 @@ export function hasNonShiftModifiers(keyEvent: KeyEventLike) {
 /** A simple key event is a non-special key (length 1) that is not modified by ctrl, alt, or shift. */
 export function isSimpleKey(keyEvent: KeyEventLike) {
     return !(keyEvent.key.length > 1 || hasNonShiftModifiers(keyEvent))
+}
+
+/**
+ * Translates the given set of keyEvents (in place) as specified by
+ * the given key translation map. All keys *and* values in the key
+ * translation map must be length-1 strings.
+ */
+export function translateKeysUsingKeyTranslateMap(
+    keyEvents: KeyEventLike[],
+    keytranslatemap: { [inkey: string]: string },
+) {
+    for (let index = 0; index < keyEvents.length; index++) {
+        let keyEvent = keyEvents[index]
+        const newkey = keytranslatemap[keyEvent.key]
+
+        // KeyboardEvents can't have been translated, MinimalKeys may
+        // have been. We can't add anything to the MinimalKey without
+        // breaking a ton of other stuff, so instead we'll just assume
+        // that the only way we've gotten a MinimalKey is if the key
+        // has already been translated. We err way on the side of
+        // safety becase translating anything more than once would
+        // almost certainly mean oscillations and other super-weird
+        // breakage.
+        const neverTranslated = keyEvent instanceof KeyboardEvent
+        if (neverTranslated && newkey !== undefined) {
+            // We can't update the keyEvent in place. However, the
+            // entire pipeline works with MinimalKeys all the way
+            // through, so we just swap the key event out for a new
+            // MinimalKey with the right key and modifiers copied from
+            // the original.
+            keyEvents[index] = new MinimalKey(
+                newkey,
+                {
+                    altKey: keyEvent.altKey,
+                    ctrlKey: keyEvent.ctrlKey,
+                    metaKey: keyEvent.metaKey,
+                    shiftKey: keyEvent.shiftKey,
+                }
+            )
+        }
+    }
 }
 
 // }}}

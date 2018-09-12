@@ -12,7 +12,7 @@
 
 import * as DOM from "./dom"
 import { hasModifiers } from "./keyseq"
-import state from "./state"
+import { contentState } from "./state_content"
 import { messageActiveTab, message } from "./messaging"
 import * as config from "./config"
 import Logger from "./logging"
@@ -82,7 +82,7 @@ function reset(args?) {
         findModeState.destructor()
         findModeState = undefined
     }
-    state.mode = "normal"
+    contentState.mode = "normal"
 }
 
 function mode(mode: "nav" | "search") {
@@ -94,14 +94,20 @@ function mode(mode: "nav" | "search") {
         // ^ why does filtering by offsetHeight work here
         findModeState.markpos = 0
         let el = findModeState.markedels[0]
-        if (!DOM.isVisible(el)) el.scrollIntoView()
-        // colour of the selected link
-        el.style.background = "lawngreen"
+        if (el) {
+            if (!DOM.isVisible(el)) el.scrollIntoView()
+            // colour of the selected link
+            el.style.background = "lawngreen"
+        } else {
+            messageActiveTab("commandline_frame", "fillcmdline", [
+                "# Couldn't find pattern: " + findModeState.filter,
+            ])
+        }
     }
 }
 
 import "./number.mod"
-function navigate(n: number = 1) {
+export function navigate(n: number = 1) {
     // also - really - should probably actually make this be an excmd
     // people will want to be able to scroll and stuff.
     // should probably move this to an update function?
@@ -119,7 +125,7 @@ function navigate(n: number = 1) {
 
 export function findPage(direction?: 1 | -1) {
     if (findModeState !== undefined) reset({ unfind: "true" })
-    state.mode = "find"
+    contentState.mode = "find"
     findModeState = new findState()
     if (direction !== undefined) findModeState.direction = direction
     document.body.appendChild(findModeState.findHost)
@@ -143,14 +149,9 @@ function pushKey(ke) {
     }
 }
 
-import { addListener, attributeCaller } from "./messaging"
-addListener(
-    "finding_content",
-    attributeCaller({
-        pushKey,
-        mode,
-        reset,
-        findPage,
-        navigate,
-    }),
-)
+export function parser(keys: KeyboardEvent[]) {
+    for (const { key } of keys) {
+        pushKey(key)
+    }
+    return { keys: [], ex_str: "", isMatch: true }
+}

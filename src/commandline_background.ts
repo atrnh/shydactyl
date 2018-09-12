@@ -1,3 +1,4 @@
+import { activeTabId } from "./lib/webext"
 import * as Messaging from "./messaging"
 
 export type onLineCallback = (exStr: string) => void
@@ -36,29 +37,29 @@ async function history(): Promise<browser.history.HistoryItem[]> {
         startTime: 0,
     })
 }
+
 async function allWindowTabs(): Promise<browser.tabs.Tab[]> {
-    let allTabs: browser.tabs.Tab[] = []
-    for (const window of await browser.windows.getAll()) {
-        const tabs = await browser.tabs.query({ windowId: window.id })
-        allTabs = allTabs.concat(tabs)
-    }
-    return allTabs
+    return browser.tabs.query({})
 }
 
-export async function show() {
+export async function show(focus = true) {
     Messaging.messageActiveTab("commandline_content", "show")
-    Messaging.messageActiveTab("commandline_content", "focus")
-    Messaging.messageActiveTab("commandline_frame", "focus")
+    if (focus) {
+        Messaging.messageActiveTab("commandline_content", "focus")
+        Messaging.messageActiveTab("commandline_frame", "focus")
+    }
 }
 
-export async function hide() {
-    Messaging.messageActiveTab("commandline_content", "hide")
-    Messaging.messageActiveTab("commandline_content", "blur")
+export async function hide(tabid?) {
+    if (!tabid) tabid = await activeTabId()
+    Messaging.messageTab(tabid, "commandline_content", "hide")
+    Messaging.messageTab(tabid, "commandline_content", "blur")
 }
 
 Messaging.addListener(
     "commandline_background",
     Messaging.attributeCaller({
+        allWindowTabs,
         currentWindowTabs,
         history,
         recvExStr,
